@@ -12,11 +12,13 @@
 </head>
 <body>
 <br>
-<h1 style="text-align:center">Pasticceria DsTech</h1>
-<form action="#" th:action="@{/accessoUtente}" class="col-lg-6 offset-lg-3 ">
+<h1 style="text-align:center">Libreria DsTech</h1>
+<br>
+<form action="#" th:action="@{/login}" method="POST" class="col-lg-6 offset-lg-3 ">
 <div class="row justify-content-center">
 <div class="input-group mb-3">
-<input type="text" th:text="*{username}" name="username" placeholder="Inserisci username" class="form-control">
+<input type="text" name="username" placeholder="Username" class="form-control">
+<input type="password" name="password" placeholder="Password" class="form-control">
 <div class="input-group-append">
 <input type="submit" value="Accedi" class="btn btn-outline-primary" >
 <br>
@@ -24,10 +26,10 @@
 </div>
 </div>
 </form>
-<div class="d-flex justify-content-center">
-<a href="/registraUtente">Non sei registrato? Registrati</a> &nbsp;oppure&nbsp;
-<a href="/accessoAdmin">Accedi come amministratore</a><br>
-</div>
+<form action="#" th:action="@{/registrazione}" class="col-lg-6 offset-lg-3 ">
+<button type="submit" name="azione" value="registrazione" class="btn btn-link">Non sei ancora registrato? Registrati</button>
+<button type="submit" name="azione" value="admin" class="btn btn-link">Entra come amministratore</button>
+</form>
 
 
 </body>
