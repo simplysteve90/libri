@@ -18,19 +18,32 @@
                 type="Submit">Logout
         </button>
     </form>
+<form action="#" th:action="@{/admin/creaLibro}" th:object="${libro}" method="post">
+<input type="text" th:field="*{titolo}"  placeholder="Titolo">
+<input type="text" th:field="*{autore}" placeholder="Autore">
 
-    <div class="panel-group" style="margin-top:40px">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <span th:utext="${userName}"></span>
-            </div>
-            <div class="panel-body">
-                <img th:src="@{/images/beer.jpg}" class="img-responsive center-block" width="400" height="400"
-                     alt="Beer"/>
-            </div>
-            <p class="admin-message-text text-center" th:utext="${adminMessage}"></p>
-        </div>
-    </div>
+<input type="submit" name="azione" value="Crea">
+</form>
+    <table class="table table-striped table-responsive-md">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Titolo</th>
+				<th>Autore</th>
+				<th>Elimina</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="libro : ${listaLibri}">
+				<td th:text="${libro.id}"></td>
+				<td th:text="${libro.titolo}"></td>
+				<td th:text="${libro.autore}"></td>
+				<td><a th:href ="@{/admin/eliminaLibro/{id}(id=${libro.id})}">Elimina</a></td>
+						
+			</tr>
+		</tbody>
+	</table>
 
 </div>
 </body>

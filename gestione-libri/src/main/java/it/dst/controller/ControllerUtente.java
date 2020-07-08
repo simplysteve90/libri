@@ -7,15 +7,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import it.dst.model.Libro;
 import it.dst.model.User;
+import it.dst.service.LibroService;
 import it.dst.service.UserService;
 
 @Controller
 public class ControllerUtente {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private LibroService libroService;
 	
 	 @GetMapping(value={"/", "/login"})
 	    public ModelAndView login(){
@@ -35,11 +43,12 @@ public class ControllerUtente {
 	        modelAndView.setViewName("registrazione");
 	        return modelAndView;
 	        }
-	        modelAndView.setViewName("admin");
+	        modelAndView.addObject("listaLibri", libroService.listaLibri());
+	        modelAndView.setViewName("vediLibri");
 	        return modelAndView;
 	    }
 	   @PostMapping(value="/registrazione")
-	    public ModelAndView registrazione(@Valid User user, BindingResult bindingResult){
+	    public ModelAndView registrazione(@Valid User user, BindingResult bindingResult,@RequestParam("ruolo")String ruolo){
 	        ModelAndView modelAndView = new ModelAndView();
 	        User userExists = userService.findUserByUsername(user.getUsername());
 	        if (userExists != null) {
@@ -73,16 +82,31 @@ public class ControllerUtente {
 	        return modelAndView;
 	   }
 	   
-	   @GetMapping(value="/utente/home")
+	   @GetMapping(value="/admin/home")
 	    public ModelAndView home(){
 	        ModelAndView modelAndView = new ModelAndView();
 	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	        User user = userService.findUserByUsername(auth.getName());
 	        modelAndView.addObject("username", "Welcome " + user.getUsername() + "/" + " (" + user.getEmail() + ")");
 	        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-	        modelAndView.setViewName("utente/home");
-	        modelAndView.addObject("listaLibri", "");
+	        modelAndView.setViewName("admin/home");
+	        modelAndView.addObject("listaLibri", libroService.listaLibri());
+	        modelAndView.addObject("libro", new Libro());
+
 	        return modelAndView;
 	    }
 	   
+	   @PostMapping(value={"/admin/creaLibro"})
+	    public ModelAndView creaLibro(Libro libro){
+	        libroService.save(libro);
+	        
+	        return home();
+	    }
+	   
+	   @GetMapping(value={"/admin/eliminaLibro/{id}"})
+	    public ModelAndView eliminaLibro(@PathVariable("id") Long id){
+	        libroService.delete(id);
+	        
+	        return home();
+	    }
 }

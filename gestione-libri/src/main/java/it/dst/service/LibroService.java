@@ -14,11 +14,11 @@ public class LibroService {
 	@Autowired
 	LibroRepository libroRepository;
 	
-	public void save(Libro dolce) {
-		libroRepository.save(dolce);
+	public void save(Libro libro) {
+		libroRepository.save(libro);
 	}
 
-	public List<Libro> listaDolci() {
+	public List<Libro> listaLibri() {
 		return (List<Libro>) libroRepository.findAll();
 	}
 
